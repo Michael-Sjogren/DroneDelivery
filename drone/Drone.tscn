@@ -1,0 +1,124 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://drone/Drone.gd" type="Script" id=1]
+[ext_resource path="res://smoke-particles/Smoke.tscn" type="PackedScene" id=2]
+[ext_resource path="res://drone/CameraFollow.tscn" type="PackedScene" id=3]
+[ext_resource path="res://drone/DroneModel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://player-hud/Timer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://player-hud/GameStageProgress.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/StageResultScreen.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/MotionTrail/MotionTrail.tscn" type="PackedScene" id=8]
+
+[sub_resource type="CylinderShape" id=6]
+radius = 0.913334
+height = 0.214891
+
+[sub_resource type="SphereShape" id=5]
+radius = 0.68
+
+[node name="Drone" type="KinematicBody"]
+collision_layer = 2
+collision/safe_margin = 0.05
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": ""
+}
+angular_damping = 2.0
+linear_damping = 0.3
+angular_rotation_speed = 0.1
+acceleration_speed = 0.3
+collision_bounceback = 3.0
+invincibilliy_time = 1.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Timer" parent="HUD" instance=ExtResource( 5 )]
+
+[node name="GameStageProgress" parent="HUD" instance=ExtResource( 6 )]
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="StageResultScreen" parent="UI" instance=ExtResource( 7 )]
+visible = false
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0174384, 0 )
+shape = SubResource( 6 )
+
+[node name="CameraFollow" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="PinJoint" type="HingeJoint" parent="."]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -0.0936943, 0 )
+nodes/node_a = NodePath("..")
+params/bias = 0.99
+angular_limit/enable = true
+angular_limit/upper = 45.0
+angular_limit/lower = -45.0
+motor/enable = true
+motor/target_velocity = 0.0
+
+[node name="Position3D" type="Position3D" parent="PinJoint"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.413188, 0 )
+
+[node name="Model" parent="." instance=ExtResource( 4 )]
+
+[node name="Area" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.745282, 0 )
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+gravity_vec = Vector3( 0, 1, 0 )
+gravity = 3.0
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
+shape = SubResource( 5 )
+
+[node name="DamageEffects" type="Spatial" parent="."]
+
+[node name="Smoke1" parent="DamageEffects" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.1, 0.5 )
+emitting = false
+amount = 4
+lifetime = 0.13
+color = Color( 1, 1, 1, 1 )
+hue_variation = 0.02
+hue_variation_random = 0.76
+
+[node name="Smoke2" parent="DamageEffects" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.1, 0.5 )
+emitting = false
+amount = 4
+lifetime = 0.13
+hue_variation = 0.02
+hue_variation_random = 0.76
+
+[node name="Smoke3" parent="DamageEffects" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.638065, 0.1, -0.549806 )
+emitting = false
+amount = 4
+lifetime = 0.13
+hue_variation = 0.02
+hue_variation_random = 0.76
+
+[node name="Smoke4" parent="DamageEffects" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.542701, 0.1, -0.547336 )
+emitting = false
+amount = 4
+lifetime = 0.13
+hue_variation = 0.02
+hue_variation_random = 0.76
+
+[node name="MotionTrail" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.338772 )
+cast_shadow = 0
+fromWidth = 0.25
+motionDelta = 0.05
+lifespan = 0.5
+startColor = Color( 0.623529, 0.815686, 1, 0.164706 )
+
+[connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]

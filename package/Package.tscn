@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://package/Package.gd" type="Script" id=1]
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.654902, 0.556863, 0.321569, 1 )
+
+[sub_resource type="CubeMesh" id=2]
+material = SubResource( 3 )
+size = Vector3( 0.721, 0.761, 0.821 )
+
+[sub_resource type="ConvexPolygonShape" id=4]
+points = PoolVector3Array( -0.3605, -0.3805, -0.4105, 0.3605, -0.3805, -0.4105, -0.3605, -0.3805, 0.4105, -0.3605, 0.3805, -0.4105, 0.3605, 0.3805, -0.4105, 0.3605, -0.3805, 0.4105, -0.3605, 0.3805, 0.4105, 0.3605, 0.3805, 0.4105 )
+
+[node name="Package" type="RigidBody" groups=["Package"]]
+collision_layer = 5
+input_ray_pickable = false
+mass = 2.55102
+contacts_reported = 1
+sleeping = true
+linear_damp = 0.1
+angular_damp = 3.829
+script = ExtResource( 1 )
+max_health = 3
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 4 )
+
+[node name="InvunrabillityTimer" type="Timer" parent="."]
+process_mode = 0
+
+[connection signal="body_entered" from="." to="." method="_on_Package_body_entered"]
+[connection signal="timeout" from="InvunrabillityTimer" to="." method="_on_InvunrabillityTimer_timeout"]

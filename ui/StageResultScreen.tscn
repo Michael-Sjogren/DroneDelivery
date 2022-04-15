@@ -1,0 +1,135 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/StageResultScreen.gd" type="Script" id=1]
+
+[node name="StageResultScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -101.5
+margin_top = -169.0
+margin_right = 101.5
+margin_bottom = -104.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RetryBtn" type="Button" parent="MarginContainer/Panel/ButtonContainer"]
+margin_right = 99.0
+margin_bottom = 65.0
+focus_neighbour_left = NodePath("../MainMenu")
+focus_neighbour_right = NodePath("../MainMenu")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Retry"
+
+[node name="MainMenu" type="Button" parent="MarginContainer/Panel/ButtonContainer"]
+margin_left = 103.0
+margin_right = 203.0
+margin_bottom = 65.0
+focus_neighbour_left = NodePath("../RetryBtn")
+focus_neighbour_right = NodePath("../RetryBtn")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Main Menu"
+
+[node name="NextStageBtn" type="Button" parent="MarginContainer/Panel/ButtonContainer"]
+visible = false
+margin_left = 136.0
+margin_right = 178.0
+margin_bottom = 40.0
+text = "Next"
+
+[node name="ScoreVBox" type="VBoxContainer" parent="MarginContainer/Panel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -66.0
+margin_top = -246.0
+margin_right = 76.0
+margin_bottom = -176.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Score" type="HBoxContainer" parent="MarginContainer/Panel/ScoreVBox"]
+margin_right = 142.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ScoreLbl" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
+margin_left = 32.0
+margin_top = 9.0
+margin_right = 77.0
+margin_bottom = 23.0
+text = "Score:"
+align = 1
+uppercase = true
+
+[node name="ScoreLbl2" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
+margin_left = 81.0
+margin_top = 9.0
+margin_right = 110.0
+margin_bottom = 23.0
+text = "5 / 5"
+align = 2
+uppercase = true
+
+[node name="Time" type="HBoxContainer" parent="MarginContainer/Panel/ScoreVBox"]
+margin_top = 37.0
+margin_right = 142.0
+margin_bottom = 70.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ScoreLbl" type="Label" parent="MarginContainer/Panel/ScoreVBox/Time"]
+margin_left = 33.0
+margin_top = 9.0
+margin_right = 68.0
+margin_bottom = 23.0
+text = "Time:"
+align = 1
+uppercase = true
+
+[node name="ScoreLbl2" type="Label" parent="MarginContainer/Panel/ScoreVBox/Time"]
+margin_left = 72.0
+margin_top = 9.0
+margin_right = 108.0
+margin_bottom = 23.0
+text = "10:00"
+align = 2
+uppercase = true
+
+[node name="ResultMessage" type="Label" parent="MarginContainer/Panel"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -20.0
+margin_top = 56.0
+margin_right = 20.0
+margin_bottom = 70.0
+text = "Result"
+align = 1
+uppercase = true
+
+[connection signal="pressed" from="MarginContainer/Panel/ButtonContainer/RetryBtn" to="." method="_on_RetryBtn_pressed"]
+[connection signal="pressed" from="MarginContainer/Panel/ButtonContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
+[connection signal="pressed" from="MarginContainer/Panel/ButtonContainer/NextStageBtn" to="." method="_on_NextStageBtn_pressed"]
