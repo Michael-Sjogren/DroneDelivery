@@ -1,10 +1,95 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://ui/StageResultScreen.gd" type="Script" id=1]
 
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 192, 600 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:rect_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "ShowResultScreen"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 192, 600 ), Vector2( 192, 136 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:rect_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
 [node name="StageResultScreen" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 192.0
+margin_top = 600.0
+margin_right = 832.0
+margin_bottom = 928.0
 script = ExtResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -12,20 +97,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
-margin_right = 1024.0
-margin_bottom = 600.0
+self_modulate = Color( 1, 1, 1, 0.682353 )
+margin_right = 640.0
+margin_bottom = 328.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/Panel"]
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 margin_left = -101.5
-margin_top = -169.0
+margin_top = 64.5
 margin_right = 101.5
-margin_bottom = -104.0
+margin_bottom = 129.5
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -57,46 +143,20 @@ text = "Next"
 
 [node name="ScoreVBox" type="VBoxContainer" parent="MarginContainer/Panel"]
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -66.0
-margin_top = -246.0
-margin_right = 76.0
-margin_bottom = -176.0
+anchor_bottom = 0.5
+margin_left = -71.0
+margin_top = -36.0
+margin_right = 71.0
+margin_bottom = 34.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
-
-[node name="Score" type="HBoxContainer" parent="MarginContainer/Panel/ScoreVBox"]
-margin_right = 142.0
-margin_bottom = 33.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
-
-[node name="ScoreLbl" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
-margin_left = 32.0
-margin_top = 9.0
-margin_right = 77.0
-margin_bottom = 23.0
-text = "Score:"
-align = 1
-uppercase = true
-
-[node name="ScoreLbl2" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
-margin_left = 81.0
-margin_top = 9.0
-margin_right = 110.0
-margin_bottom = 23.0
-text = "5 / 5"
-align = 2
-uppercase = true
 
 [node name="Time" type="HBoxContainer" parent="MarginContainer/Panel/ScoreVBox"]
-margin_top = 37.0
 margin_right = 142.0
-margin_bottom = 70.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -119,16 +179,48 @@ text = "10:00"
 align = 2
 uppercase = true
 
+[node name="Score" type="HBoxContainer" parent="MarginContainer/Panel/ScoreVBox"]
+margin_top = 37.0
+margin_right = 142.0
+margin_bottom = 70.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ScoreLbl" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
+margin_left = 32.0
+margin_top = 9.0
+margin_right = 77.0
+margin_bottom = 23.0
+text = "Score:"
+align = 1
+uppercase = true
+
+[node name="ScoreLbl2" type="Label" parent="MarginContainer/Panel/ScoreVBox/Score"]
+margin_left = 81.0
+margin_top = 9.0
+margin_right = 110.0
+margin_bottom = 23.0
+text = "5 / 5"
+align = 2
+uppercase = true
+
 [node name="ResultMessage" type="Label" parent="MarginContainer/Panel"]
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-margin_left = -20.0
-margin_top = 56.0
-margin_right = 20.0
-margin_bottom = 70.0
+anchor_bottom = 0.5
+margin_left = -23.0
+margin_top = -119.0
+margin_right = 23.0
+margin_bottom = -105.0
 text = "Result"
 align = 1
 uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/ShowResultScreen = SubResource( 2 )
 
 [connection signal="pressed" from="MarginContainer/Panel/ButtonContainer/RetryBtn" to="." method="_on_RetryBtn_pressed"]
 [connection signal="pressed" from="MarginContainer/Panel/ButtonContainer/MainMenu" to="." method="_on_MainMenu_pressed"]

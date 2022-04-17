@@ -1,20 +1,51 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://drone/Drone.gd" type="Script" id=1]
 [ext_resource path="res://smoke-particles/Smoke.tscn" type="PackedScene" id=2]
 [ext_resource path="res://drone/CameraFollow.tscn" type="PackedScene" id=3]
 [ext_resource path="res://drone/DroneModel.tscn" type="PackedScene" id=4]
-[ext_resource path="res://player-hud/Timer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://player-hud/GameStageProgress.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ui/StageResultScreen.tscn" type="PackedScene" id=7]
+[ext_resource path="res://gltf-meshes/Propeller.gltf" type="PackedScene" id=5]
+[ext_resource path="res://sounds/helicopter.ogg" type="AudioStream" id=6]
+[ext_resource path="res://sounds/explosion.ogg" type="AudioStream" id=7]
 [ext_resource path="res://addons/MotionTrail/MotionTrail.tscn" type="PackedScene" id=8]
+[ext_resource path="res://sounds/mouseclick.wav" type="AudioStream" id=9]
 
-[sub_resource type="CylinderShape" id=6]
-radius = 0.913334
-height = 0.214891
+[sub_resource type="SphereShape" id=9]
+radius = 0.598229
 
 [sub_resource type="SphereShape" id=5]
 radius = 0.68
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Model/Propeller:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 180, 0 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "RotatePropeller"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Model/Propeller:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 180, 0 ), Vector3( 0, 540, 0 ) ]
+}
 
 [node name="Drone" type="KinematicBody"]
 collision_layer = 2
@@ -27,24 +58,12 @@ angular_damping = 2.0
 linear_damping = 0.3
 angular_rotation_speed = 0.1
 acceleration_speed = 0.3
-collision_bounceback = 3.0
+collision_bounceback = 77.227
 invincibilliy_time = 1.0
-
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="Timer" parent="HUD" instance=ExtResource( 5 )]
-
-[node name="GameStageProgress" parent="HUD" instance=ExtResource( 6 )]
-
-[node name="UI" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="StageResultScreen" parent="UI" instance=ExtResource( 7 )]
-visible = false
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0174384, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 9 )
 
 [node name="CameraFollow" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -52,7 +71,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 [node name="Tween" type="Tween" parent="."]
 
 [node name="PinJoint" type="HingeJoint" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -0.0936943, 0 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -0.252723, 0 )
 nodes/node_a = NodePath("..")
 params/bias = 0.99
 angular_limit/enable = true
@@ -65,6 +84,18 @@ motor/target_velocity = 0.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.413188, 0 )
 
 [node name="Model" parent="." instance=ExtResource( 4 )]
+transform = Transform( -1.58208, 0, -1.3831e-07, 0, 1.58208, 0, 1.3831e-07, 0, -1.58208, 0, 0, 0 )
+
+[node name="Propeller" parent="Model" instance=ExtResource( 5 )]
+transform = Transform( -0.433439, 0, -3.78924e-08, 0, 0.433439, 0, 3.78924e-08, 0, -0.433439, 0, 0.219616, 0 )
+
+[node name="MotionTrail2" parent="Model/Propeller" instance=ExtResource( 8 )]
+transform = Transform( -1, 0, 1.72853e-06, 0, 1, 0, -1.72853e-06, 0, -1, -0.258611, 0, -0.800175 )
+cast_shadow = 0
+fromWidth = 0.55
+motionDelta = 0.05
+lifespan = 0.35
+startColor = Color( 1, 0.772549, 0, 0.239216 )
 
 [node name="Area" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.745282, 0 )
@@ -81,44 +112,70 @@ shape = SubResource( 5 )
 [node name="DamageEffects" type="Spatial" parent="."]
 
 [node name="Smoke1" parent="DamageEffects" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.1, 0.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.308765, 0.224941, 0 )
 emitting = false
-amount = 4
-lifetime = 0.13
+amount = 8
+lifetime = 0.25
 color = Color( 1, 1, 1, 1 )
 hue_variation = 0.02
 hue_variation_random = 0.76
 
 [node name="Smoke2" parent="DamageEffects" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.1, 0.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.132012, -0.313855 )
 emitting = false
-amount = 4
-lifetime = 0.13
+amount = 8
+lifetime = 0.25
 hue_variation = 0.02
 hue_variation_random = 0.76
 
 [node name="Smoke3" parent="DamageEffects" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.638065, 0.1, -0.549806 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.321824, 0.189962, 0 )
 emitting = false
-amount = 4
-lifetime = 0.13
+amount = 8
+lifetime = 0.25
 hue_variation = 0.02
 hue_variation_random = 0.76
 
 [node name="Smoke4" parent="DamageEffects" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.542701, 0.1, -0.547336 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.439561, 0 )
 emitting = false
-amount = 4
-lifetime = 0.13
+amount = 8
+lifetime = 0.25
 hue_variation = 0.02
 hue_variation_random = 0.76
 
-[node name="MotionTrail" parent="." instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.338772 )
-cast_shadow = 0
-fromWidth = 0.25
-motionDelta = 0.05
-lifespan = 0.5
-startColor = Color( 0.623529, 0.815686, 1, 0.164706 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "RotatePropeller"
+playback_speed = 3.0
+anims/RESET = SubResource( 7 )
+anims/RotatePropeller = SubResource( 8 )
+
+[node name="PropellerSFX" type="AudioStreamPlayer3D" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.422278, -0.9 )
+stream = ExtResource( 6 )
+autoplay = true
+max_distance = 300.0
+bus = "engine_sfx"
+doppler_tracking = 2
+
+[node name="PackageDropSFX" type="AudioStreamPlayer3D" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.422278, -0.134675 )
+stream = ExtResource( 9 )
+max_distance = 300.0
+bus = "sfx"
+doppler_tracking = 2
+
+[node name="Explostion" type="AudioStreamPlayer3D" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.022278, 0.1 )
+stream = ExtResource( 7 )
+unit_db = 0.905
+unit_size = 35.5
+pitch_scale = 0.66
+bus = "sfx"
+doppler_tracking = 2
+
+[node name="Listener" type="Listener" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.47043 )
+current = true
 
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]

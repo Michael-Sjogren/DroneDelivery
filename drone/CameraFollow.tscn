@@ -9,6 +9,7 @@ shape = SubResource( 1 )
 spring_length = 3.0
 
 [node name="Camera" type="Camera" parent="."]
+doppler_tracking = 2
 current = true
 fov = 85.0
 near = 0.01

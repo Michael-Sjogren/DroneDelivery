@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Bottle Break.wav-72046bd7265396ca7b13ff4bd877ea14.sample"
+
+[deps]
+
+source_file="res://sounds/Bottle Break.wav"
+dest_files=[ "res://.import/Bottle Break.wav-72046bd7265396ca7b13ff4bd877ea14.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

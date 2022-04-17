@@ -8,10 +8,10 @@ export(float, 0, 1) var linear_damping = .5
 export(float, 0 , 1) var angular_rotation_speed = .5
 export(float, 0 , 30) var acceleration_speed = 15
 export(float , 0 , 10) var gravity_multipler = 1.0
-export(float , 0 , 10) var collision_bounceback = 1.0
+export(float , 0 , 1000) var collision_bounceback = 1.0
 export (float , 0 , 1) var invincibilliy_time = .5
 onready var tween := $Tween
-
+onready var propeller_sfx:AudioStreamPlayer3D = $PropellerSFX
 var _health:int = MAX_HEALTH
 var _input:Vector3
 var _angular_velocity := Vector3.ZERO
@@ -23,8 +23,11 @@ var _is_alive = true
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$CameraFollow.set_as_toplevel(true)
+	Globals.connect("end_stage", self , "_disable_player")
 	
-
+func _disable_player():
+	_is_alive = false
+	
 func _physics_process(delta):
 	if not _is_alive:
 		return
@@ -48,10 +51,12 @@ func _physics_process(delta):
 		_velocity = _velocity.normalized() * MAX_SPEED
 	if _input.length_squared() == 0.0:
 		_velocity = _velocity.linear_interpolate(Vector3(rand_range(-1 , 1) , _velocity.y , rand_range(-1, 1)) * .5 , linear_damping)
-	
+		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1 , .1)
+	else:
+		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1.15 , .25)
 	_velocity = move_and_slide(_velocity , Vector3.UP)
 	if get_slide_count():
-		_velocity = (get_slide_collision(0).normal) * collision_bounceback
+		#_velocity += (get_slide_collision(0).normal).bounce(_velocity) * collision_bounceback
 		take_damage(1)
 	if Input.is_action_just_pressed("drop_cargo") and is_instance_valid(carried_package):
 		detach_package()
@@ -70,16 +75,14 @@ func rotate_drone(delta):
 	orthonormalize()
 	
 func take_damage(dmg:int):
-	print(_time_invincible)
 	if not _can_take_damage:
-		print("cannot take dmg")
 		return
 	_health = clamp(_health - dmg , 0 , MAX_HEALTH)
 	$DamageEffects.get_child(_health).emitting = true
 	_time_invincible = 0.0
 	_can_take_damage = false
 	
-	if _health <= 0:
+	if _health <= 0 and _is_alive:
 		_die()
 
 	
@@ -97,22 +100,21 @@ func _position_camera() -> void:
 	
 func _die():
 	_is_alive = false
-	axis_lock_motion_x = true
-	axis_lock_motion_y = true
-	axis_lock_motion_z = true
 	$DamageEffects.visible = false
 	$Model.visible = false
 	$CollisionShape.disabled = true
+	$Explostion.play()
 	if carried_package:
 		carried_package.destroy()
-	if not Globals.stage_failed:
-		Globals.emit_signal("stage_failed")
+
+	Globals.emit_signal("stage_failed")
 
 func detach_package():
-	$PinJoint.set("nodes/node_b","")
-	carried_package.set_is_connected_to_drone(false)
-	yield(get_tree().create_timer(.3) , "timeout")
-	carried_package = null
+	if is_instance_valid(carried_package):
+		$PinJoint.set("nodes/node_b","")
+		$PackageDropSFX.play()
+		carried_package.set_is_connected_to_drone(false)
+		carried_package = null
 
 func _on_Area_body_entered(body:Spatial):
 	if body.is_in_group("Package") and not is_instance_valid(carried_package):

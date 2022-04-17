@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://player-hud/Timer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://player-hud/GameStageProgress.tscn" type="PackedScene" id=2]
+[ext_resource path="res://player-hud/GameStageProgress.gd" type="Script" id=3]
+[ext_resource path="res://player-hud/GameTimer.gd" type="Script" id=4]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="Timer" type="Control" parent="." instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -512.0
+margin_right = 512.0
+margin_bottom = 600.0
+script = ExtResource( 4 )
+
+[node name="GameStageProgress" type="Control" parent="." instance=ExtResource( 2 )]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+script = ExtResource( 3 )

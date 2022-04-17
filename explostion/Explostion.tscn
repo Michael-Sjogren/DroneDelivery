@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="QuadMesh" id=1]
+
+[node name="Explostion" type="CPUParticles"]
+generate_lightmap = false
+mesh = SubResource( 1 )
+emission_shape = 5
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+emission_ring_height = 1.0
+emission_ring_axis = Vector3( 0, 0, 1 )
+direction = Vector3( 0, 0, 0 )
+flatness = 0.35
+initial_velocity = 5.84
+initial_velocity_random = 0.35

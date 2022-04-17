@@ -2,8 +2,8 @@ extends RigidBody
 export var max_health:int = 10
 var health:int
 var is_connected_to_drone := false
-var is_invulnerable = false
-
+var is_invulnerable = true
+onready var package_radius:float = $Radius.shape.radius
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -11,6 +11,11 @@ func _ready():
 
 func destroy():
 	Globals.emit_signal("package_destroyed", max_health)
+	$BreakSFX.play()
+	$PackageModel.visible = false
+	mode = RigidBody.MODE_STATIC
+	$CollisionShape.disabled = true
+	yield($BreakSFX , "finished")
 	queue_free()
 
 func _physics_process(delta):
@@ -19,6 +24,8 @@ func _physics_process(delta):
 
 
 func set_is_connected_to_drone(_is_connected:bool):
+	if _is_connected:
+		$PickupSFX.play()
 	contact_monitor = true
 	is_invulnerable = true
 	$InvunrabillityTimer.start()

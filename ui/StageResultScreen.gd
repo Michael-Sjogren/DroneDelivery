@@ -9,21 +9,30 @@ func _ready():
 	Globals.connect("stage_failed",self , "_on_stage_failed")
 
 
-func _on_stage_complete():
+func _on_stage_complete(final_score:int, time:String):
 	result_message_lbl.text = stage_complete_message
 	$MarginContainer/Panel/ButtonContainer/RetryBtn.grab_focus()
-	$MarginContainer/Panel/ScoreVBox/Score/ScoreLbl2.text = str(Globals.calculate_final_score())
-	show()
+	$MarginContainer/Panel/ScoreVBox/Score/ScoreLbl2.text = str(final_score)
+	$MarginContainer/Panel/ScoreVBox/Time/ScoreLbl2.text = time
+	$AnimationPlayer.play("ShowResultScreen")
 
 func _on_stage_failed():
+	$MarginContainer/Panel/ButtonContainer/RetryBtn.grab_focus()	
 	result_message_lbl.text = stage_failed_message
-	show()
+	$MarginContainer/Panel/ScoreVBox/Score/ScoreLbl2.text = str(0)
+	$MarginContainer/Panel/ScoreVBox/Time/ScoreLbl2.text = "DNF"
+	$AnimationPlayer.play("ShowResultScreen")
+	yield($AnimationPlayer ,"animation_finished")
 
 func _on_RetryBtn_pressed():
+	$AnimationPlayer.play_backwards("ShowResultScreen")
+	yield($AnimationPlayer ,"animation_finished")
 	get_tree().reload_current_scene()
 
 
 func _on_MainMenu_pressed():
+	$AnimationPlayer.play_backwards("ShowResultScreen")
+	yield($AnimationPlayer ,"animation_finished")
 	get_tree().change_scene("res://ui/Menu.tscn")
 
 

@@ -7,7 +7,7 @@ func _ready():
 
 
 func _on_StartBtn_pressed():
-	get_tree().change_scene("res://Main.tscn")
+	get_tree().change_scene("res://levels/GameStage.tscn")
 
 
 func _on_OptionsBtn_pressed():

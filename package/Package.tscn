@@ -1,37 +1,52 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://package/Package.gd" type="Script" id=1]
+[ext_resource path="res://package/PackageModel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sounds/beep.wav" type="AudioStream" id=3]
+[ext_resource path="res://sounds/Bottle Break.wav" type="AudioStream" id=4]
 
-[sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.654902, 0.556863, 0.321569, 1 )
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.296932, 0.309958, 0.302364 )
 
-[sub_resource type="CubeMesh" id=2]
-material = SubResource( 3 )
-size = Vector3( 0.721, 0.761, 0.821 )
-
-[sub_resource type="ConvexPolygonShape" id=4]
-points = PoolVector3Array( -0.3605, -0.3805, -0.4105, 0.3605, -0.3805, -0.4105, -0.3605, -0.3805, 0.4105, -0.3605, 0.3805, -0.4105, 0.3605, 0.3805, -0.4105, 0.3605, -0.3805, 0.4105, -0.3605, 0.3805, 0.4105, 0.3605, 0.3805, 0.4105 )
+[sub_resource type="SphereShape" id=2]
+radius = 0.300768
 
 [node name="Package" type="RigidBody" groups=["Package"]]
 collision_layer = 5
 input_ray_pickable = false
 mass = 2.55102
 contacts_reported = 1
-sleeping = true
+contact_monitor = true
 linear_damp = 0.1
 angular_damp = 3.829
 script = ExtResource( 1 )
-max_health = 3
-
-[node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = SubResource( 2 )
-material/0 = null
+max_health = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-shape = SubResource( 4 )
+shape = SubResource( 1 )
 
 [node name="InvunrabillityTimer" type="Timer" parent="."]
 process_mode = 0
+one_shot = true
+autostart = true
+
+[node name="PackageModel" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0 )
+
+[node name="Radius" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
+disabled = true
+
+[node name="BreakSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="PickupSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 3 )
+unit_db = 13.603
+unit_size = 14.4
+max_db = 3.504
+pitch_scale = 0.9
+bus = "sfx"
 
 [connection signal="body_entered" from="." to="." method="_on_Package_body_entered"]
 [connection signal="timeout" from="InvunrabillityTimer" to="." method="_on_InvunrabillityTimer_timeout"]

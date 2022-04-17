@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/StageResultScreen.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/StageResultScreen.gd" type="Script" id=2]
+
+[node name="UI" type="CanvasLayer"]
+layer = 2
+
+[node name="StageResultScreen" type="Control" parent="." instance=ExtResource( 1 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -320.0
+margin_top = 300.0
+margin_right = 320.0
+margin_bottom = 628.0
+script = ExtResource( 2 )

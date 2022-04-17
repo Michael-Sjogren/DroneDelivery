@@ -15,7 +15,7 @@ func _physics_process(delta):
 		if package.linear_velocity.length_squared() < .01 and not package.is_connected_to_drone:
 			var distance :float = package.global_transform.origin.distance_to(global_transform.origin)
 			
-			Globals.emit_signal("package_delivered",package.health , distance , radius)
+			Globals.emit_signal("package_delivered",package.health , distance - package.package_radius , radius)
 			package.queue_free()
 
 
