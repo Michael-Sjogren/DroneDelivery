@@ -161,6 +161,7 @@ doppler_tracking = 2
 [node name="PackageDropSFX" type="AudioStreamPlayer3D" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.422278, -0.134675 )
 stream = ExtResource( 9 )
+attenuation_model = 1
 max_distance = 300.0
 bus = "sfx"
 doppler_tracking = 2
@@ -177,5 +178,11 @@ doppler_tracking = 2
 [node name="Listener" type="Listener" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.47043 )
 current = true
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.474859, 0, -0.736125 )
+
+[node name="SpotLight2" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477477, 0, -0.736125 )
 
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
