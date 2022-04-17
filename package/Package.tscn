@@ -39,6 +39,9 @@ disabled = true
 
 [node name="BreakSFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 4 )
+unit_db = 1.332
+unit_size = 29.5
+pitch_scale = 0.6
 
 [node name="PickupSFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 3 )
