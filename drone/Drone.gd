@@ -35,36 +35,49 @@ func _disable_player():
 func _physics_process(delta):
 	if not _is_alive:
 		return
+	# TIMER
 	if not _can_take_damage:
 		_time_invincible = clamp(_time_invincible + delta ,  0 , invincibilliy_time)
 		if _time_invincible >= invincibilliy_time:
 			_can_take_damage = true
-
+	# camera
 	_position_camera()
+	# rotation
 	rotate_drone(delta)
-	_velocity += Vector3.DOWN * (9.8  * gravity_multipler) * delta
-	var y = _velocity.y
-	_velocity += ((global_transform.basis.z * _input.z) + global_transform.basis.x * -_input.x).normalized() * acceleration_speed
-	_velocity.y = y
+	# gravity
+	# foward / back
+	var horizontal_vel:Vector3 = (((global_transform.basis.z * _input.z) + global_transform.basis.x * -_input.x).normalized() * acceleration_speed) * Vector3(1,0,1)
+	var new_vel:Vector3 = horizontal_vel + _velocity
+	# up / down
 	if _input.y > 0.0:
-		_velocity += Vector3.UP * acceleration_speed * 2
-	elif _input.y == 0.0:
-		_velocity += Vector3.UP * 9.8 * gravity_multipler * delta
-	
+		new_vel += Vector3.UP * acceleration_speed 
+	elif _input.y < 0.0:
+		new_vel += Vector3.DOWN * 9.8 * gravity_multipler * delta
+	# clamp speed
 	if _velocity.length() > MAX_SPEED:
-		_velocity = _velocity.normalized() * MAX_SPEED
+		new_vel = new_vel.normalized() * MAX_SPEED
+	# slow down
 	if _input.length_squared() == 0.0:
-		_velocity = _velocity.linear_interpolate(Vector3() , linear_damping)
-		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1 , .1)
+		new_vel = new_vel.linear_interpolate(Vector3() , linear_damping)
+		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , .95 , .1)
 	else:
-		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1.15 , .25)
-	_velocity = move_and_slide(_velocity , Vector3.UP)
+		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1.25 , .08)
+	# apply vel
+	_velocity = move_and_slide(new_vel , Vector3.UP)
+	# handle collisions
+	if $RayCast.is_colliding():
+		$RayCast/BlobShadowMesh.visible = true
+		$RayCast/BlobShadowMesh.global_transform.origin = Vector3.UP * .05 + $RayCast.get_collision_point()
+	else:
+		$RayCast/BlobShadowMesh.visible = false
 	if get_slide_count():
 		#_velocity += (get_slide_collision(0).normal).bounce(_velocity) * collision_bounceback
 		take_damage(1)
+	# package
 	if Input.is_action_just_pressed("drop_cargo") and is_instance_valid(carried_package):
 		detach_package()
-		
+
+
 func rotate_drone(delta):
 	_angular_velocity.y += _rotate_y * angular_rotation_speed * delta
 	if _angular_velocity.length() > MAX_ANGULAR_SPEED:
@@ -105,8 +118,8 @@ func _input(event):
 
 func _position_camera() -> void:
 	var pos = global_transform.origin + Vector3.UP * .25 + global_transform.basis.z.slide(Vector3.UP) * .5
-	$CameraFollow.look_at_from_position(pos, global_transform.origin + (-global_transform.basis.z.slide(Vector3.UP)).normalized(), Vector3.UP)
-	
+	$CameraFollow.look_at_from_position(pos, global_transform.origin + (-global_transform.basis.z ).normalized(), Vector3.UP)
+	#$CameraFollow/Camera.look_at(global_transform.origin + (-global_transform.basis.z + _velocity.normalized()).normalized() * get_physics_process_delta_time() * 25 * Vector3(-1,1,0) , Vector3.UP)
 func _die():
 	_is_alive = false
 	$DamageEffects.visible = false

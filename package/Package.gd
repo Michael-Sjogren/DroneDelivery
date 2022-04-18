@@ -17,7 +17,6 @@ func destroy():
 	$BreakSFX.play()
 	$PackageModel.visible = false
 	mode = RigidBody.MODE_STATIC
-	$CollisionShape.disabled = true
 	$Explostion.emitting = true
 	yield($BreakSFX , "finished")
 	queue_free()

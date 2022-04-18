@@ -19,7 +19,7 @@ mesh = SubResource( 4 )
 skeleton = NodePath("../..")
 material/0 = null
 
-[node name="StaticBody2" type="StaticBody" parent="."]
+[node name="StaticBody" type="StaticBody" parent="."]
 
-[node name="CollisionShape" type="CollisionShape" parent="StaticBody2"]
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
 shape = SubResource( 8 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://drone/Drone.gd" type="Script" id=1]
 [ext_resource path="res://smoke-particles/Smoke.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://sounds/explosion.ogg" type="AudioStream" id=7]
 [ext_resource path="res://addons/MotionTrail/MotionTrail.tscn" type="PackedScene" id=8]
 [ext_resource path="res://sounds/mouseclick.wav" type="AudioStream" id=9]
+[ext_resource path="res://materials/blob-shadow.tres" type="Material" id=10]
 
 [sub_resource type="SphereShape" id=9]
 radius = 0.598229
@@ -47,8 +48,9 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 180, 0 ), Vector3( 0, 540, 0 ) ]
 }
 
+[sub_resource type="QuadMesh" id=10]
+
 [node name="Drone" type="KinematicBody"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.54669, 6.12582, 34.6663 )
 collision_layer = 2
 collision/safe_margin = 0.05
 script = ExtResource( 1 )
@@ -175,5 +177,30 @@ doppler_tracking = 2
 [node name="Listener" type="Listener" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.47043 )
 current = true
+
+[node name="RayCast" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.521752, 0 )
+enabled = true
+cast_to = Vector3( 0, -25, 0 )
+debug_shape_custom_color = Color( 0, 0.635294, 0.737255, 1 )
+
+[node name="BlobShadowMesh" type="MeshInstance" parent="RayCast"]
+transform = Transform( 0.770959, 0, 0, 0, -4.37114e-08, 1, 0, -0.770959, -3.36997e-08, 0, 0, 0 )
+cast_shadow = 0
+generate_lightmap = false
+mesh = SubResource( 10 )
+material/0 = ExtResource( 10 )
+
+[node name="BlobShadowMesh2" type="MeshInstance" parent="RayCast/BlobShadowMesh"]
+transform = Transform( 0.972653, 0, 0, 0, 0.972653, -1.19541e-09, 0, -1.19537e-09, 1, 0, 0, 0 )
+cast_shadow = 0
+generate_lightmap = false
+mesh = SubResource( 10 )
+skeleton = NodePath("../..")
+material/0 = ExtResource( 10 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.044125, 0.999026, 0, -0.999026, 0.044125, 0, 2.18321, 0 )
+editor_only = true
 
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]

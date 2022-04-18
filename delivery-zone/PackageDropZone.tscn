@@ -4,8 +4,8 @@
 [ext_resource path="res://delivery-zone/DropZoneModel.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CylinderShape" id=14]
-radius = 2.94327
-height = 1.10858
+radius = 2.8
+height = 1.0
 
 [sub_resource type="CylinderMesh" id=1]
 top_radius = 3.0
@@ -34,7 +34,7 @@ linear_damp = 0.25
 angular_damp = 0.25
 
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0795629, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.179563, 0 )
 shape = SubResource( 14 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]

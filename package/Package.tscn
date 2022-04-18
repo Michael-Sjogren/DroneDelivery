@@ -16,7 +16,7 @@ radius = 0.300768
 size = Vector2( 2, 2 )
 
 [node name="Package" type="RigidBody" groups=["Package"]]
-collision_layer = 5
+collision_layer = 4
 input_ray_pickable = false
 mass = 2.55102
 contacts_reported = 1
