@@ -18,11 +18,12 @@ func destroy():
 	$PackageModel.visible = false
 	mode = RigidBody.MODE_STATIC
 	$CollisionShape.disabled = true
+	$Explostion.emitting = true
 	yield($BreakSFX , "finished")
 	queue_free()
 
 func _physics_process(delta):
-	if health <= 0 and not is_destroyed:
+	if (health <= 0 or global_transform.origin.y < -100) and not is_destroyed:
 		destroy()
 
 
@@ -31,7 +32,8 @@ func set_is_connected_to_drone(_is_connected:bool):
 		is_invulnerable = true
 		$InvunrabillityTimer.start()
 	else:
-		$PickupSFX.play()		
+		$PickupSFX.pitch_scale = .5
+		$PickupSFX.play()
 	contact_monitor = true
 
 	#contact_monitor = !_is_connected
@@ -46,6 +48,5 @@ func _on_Package_body_entered(body):
 				$InvunrabillityTimer.start()
 				$BreakSFX.pitch_scale = 2
 				$BreakSFX.play()
-
 func _on_InvunrabillityTimer_timeout():
 	is_invulnerable = false

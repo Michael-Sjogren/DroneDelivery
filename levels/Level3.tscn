@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://package/Package.tscn" type="PackedScene" id=2]
+[ext_resource path="res://levels/GameStage.gd" type="Script" id=3]
+[ext_resource path="res://levels/level-prefabs/PillarGreenDropZone.tscn" type="PackedScene" id=4]
+[ext_resource path="res://player-hud/HUD.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/UI.tscn" type="PackedScene" id=6]
+[ext_resource path="res://drone/Drone.tscn" type="PackedScene" id=7]
+[ext_resource path="res://levels/level-prefabs/PillarGrey.tscn" type="PackedScene" id=8]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0.102041, 1 )
+colors = PoolColorArray( 0.0507812, 0.0507812, 0.0507812, 1, 1, 0.935455, 0.824219, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="Environment" id=12]
+background_mode = 1
+background_color = Color( 0.235294, 0.388235, 0.596078, 1 )
+ambient_light_color = Color( 0.431373, 0.435294, 0.576471, 1 )
+ambient_light_energy = 1.33
+ambient_light_sky_contribution = 0.3
+fog_enabled = true
+fog_color = Color( 0.25098, 0.403922, 0.607843, 1 )
+fog_sun_color = Color( 1, 0.976471, 0.933333, 1 )
+fog_sun_amount = 0.8
+fog_depth_enabled = false
+fog_depth_end = 111.1
+fog_depth_curve = 0.203064
+fog_transmit_enabled = true
+fog_transmit_curve = 0.554784
+fog_height_enabled = true
+fog_height_curve = 0.812253
+dof_blur_far_enabled = true
+dof_blur_far_distance = 168.7
+dof_blur_far_transition = 15.0
+dof_blur_far_amount = 0.12
+glow_enabled = true
+glow_intensity = 0.79
+glow_bloom = 0.12
+adjustment_color_correction = SubResource( 3 )
+
+[sub_resource type="BoxShape" id=13]
+extents = Vector3( 64, 1.12055, 83 )
+
+[node name="Level3" type="Spatial"]
+script = ExtResource( 3 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 13, 0 )
+light_color = Color( 1, 0.921569, 0.682353, 1 )
+light_energy = 1.5
+shadow_enabled = true
+shadow_color = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+directional_shadow_blend_splits = true
+directional_shadow_depth_range = 1
+directional_shadow_max_distance = 120.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 12 )
+
+[node name="Enviorment" type="Spatial" parent="."]
+
+[node name="PillarGreenDropZone" parent="Enviorment" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25.4138, -9.4431, 23.5358 )
+
+[node name="PillarGreenDropZone2" parent="Enviorment" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25.4138, -9.4431, 44.5358 )
+
+[node name="PillarGrey" parent="Enviorment" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3118, -4.82781, 35.5152 )
+
+[node name="Drone" parent="." instance=ExtResource( 7 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10.137, 47.5102, 36.0477 )
+
+[node name="Packages" type="Spatial" parent="."]
+
+[node name="Package2" parent="Packages" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3469, 45.5411, 36.3154 )
+
+[node name="Package3" parent="Packages" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7545, 45.5411, 35.0888 )
+
+[node name="HUD" parent="." instance=ExtResource( 5 )]
+
+[node name="UI" parent="." instance=ExtResource( 6 )]
+
+[node name="KillZone" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 36.0863, 0 )
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="KillZone"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.12274, 0 )
+shape = SubResource( 13 )
+
+[connection signal="body_entered" from="KillZone" to="." method="_on_KillZone_body_entered"]

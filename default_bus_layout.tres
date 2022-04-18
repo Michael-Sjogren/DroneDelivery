@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=3 format=2]
+[gd_resource type="AudioBusLayout" load_steps=2 format=2]
 
 [sub_resource type="AudioEffectDistortion" id=4]
 resource_name = "Distortion"
@@ -6,11 +6,6 @@ mode = 3
 pre_gain = 2.52
 drive = 0.53
 post_gain = 0.09
-
-[sub_resource type="AudioEffectNotchFilter" id=2]
-resource_name = "NotchFilter"
-resonance = 0.09
-gain = 0.0
 
 [resource]
 bus/1/name = "sfx"
@@ -27,5 +22,3 @@ bus/2/volume_db = 0.0
 bus/2/send = "Master"
 bus/2/effect/0/effect = SubResource( 4 )
 bus/2/effect/0/enabled = true
-bus/2/effect/1/effect = SubResource( 2 )
-bus/2/effect/1/enabled = true

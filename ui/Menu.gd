@@ -7,11 +7,13 @@ func _ready():
 
 
 func _on_StartBtn_pressed():
-	get_tree().change_scene("res://levels/GameStage.tscn")
+	Globals.next_level = 0
+	Globals.current_level = 0
+	Globals._load_next_level()
 
 
 func _on_OptionsBtn_pressed():
-	pass # Replace with function body.
+	Globals.emit_signal("show_options")
 
 
 func _on_QuitBtn_pressed():

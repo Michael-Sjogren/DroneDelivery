@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://ui/Menu.gd" type="Script" id=1]
+[ext_resource path="res://ui/OptionsMenu.tscn" type="PackedScene" id=2]
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
@@ -58,6 +59,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Quit"
 flat = true
+
+[node name="OptionsMenu" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [connection signal="pressed" from="Panel/VBoxContainer/StartBtn" to="." method="_on_StartBtn_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/OptionsBtn" to="." method="_on_OptionsBtn_pressed"]

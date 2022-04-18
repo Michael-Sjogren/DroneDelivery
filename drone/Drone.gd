@@ -14,6 +14,7 @@ onready var tween := $Tween
 onready var propeller_sfx:AudioStreamPlayer3D = $PropellerSFX
 var _health:int = MAX_HEALTH
 var _input:Vector3
+var _rotate_y = 0.0
 var _angular_velocity := Vector3.ZERO
 var _velocity := Vector3.ZERO
 var carried_package:RigidBody = null
@@ -24,8 +25,11 @@ var _is_alive = true
 func _ready():
 	$CameraFollow.set_as_toplevel(true)
 	Globals.connect("end_stage", self , "_disable_player")
-	
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 func _disable_player():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	$PropellerSFX.stop()
 	_is_alive = false
 	
 func _physics_process(delta):
@@ -40,7 +44,7 @@ func _physics_process(delta):
 	rotate_drone(delta)
 	_velocity += Vector3.DOWN * (9.8  * gravity_multipler) * delta
 	var y = _velocity.y
-	_velocity += global_transform.basis.z * _input.z * acceleration_speed
+	_velocity += ((global_transform.basis.z * _input.z) + global_transform.basis.x * -_input.x).normalized() * acceleration_speed
 	_velocity.y = y
 	if _input.y > 0.0:
 		_velocity += Vector3.UP * acceleration_speed * 2
@@ -50,7 +54,7 @@ func _physics_process(delta):
 	if _velocity.length() > MAX_SPEED:
 		_velocity = _velocity.normalized() * MAX_SPEED
 	if _input.length_squared() == 0.0:
-		_velocity = _velocity.linear_interpolate(Vector3(rand_range(-1 , 1) , _velocity.y , rand_range(-1, 1)) * .5 , linear_damping)
+		_velocity = _velocity.linear_interpolate(Vector3() , linear_damping)
 		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1 , .1)
 	else:
 		propeller_sfx.pitch_scale = lerp(propeller_sfx.pitch_scale , 1.15 , .25)
@@ -62,17 +66,16 @@ func _physics_process(delta):
 		detach_package()
 		
 func rotate_drone(delta):
-	_angular_velocity.y += _input.x * angular_rotation_speed * delta
+	_angular_velocity.y += _rotate_y * angular_rotation_speed * delta
 	if _angular_velocity.length() > MAX_ANGULAR_SPEED:
 		_angular_velocity = _angular_velocity.normalized() * MAX_ANGULAR_SPEED
 	
 	rotate_y(_angular_velocity.y)
 
-	if _input.x == 0.0:
+	if _rotate_y == 0.0:
 		_angular_velocity.y = move_toward(_angular_velocity.y , 0.0 , abs(_angular_velocity.y) * angular_damping * delta)
-	rotation.x = lerp_angle(rotation.x , deg2rad(45 * _input.z) , 0.05)
-	rotation.z = lerp_angle(rotation.z , deg2rad(45 * _input.x) , 0.05)
-	orthonormalize()
+	$Model.rotation.x = lerp_angle($Model.rotation.x , deg2rad(45 * -_input.z) , 0.05)
+	$Model.rotation.z = lerp_angle($Model.rotation.z , deg2rad(45 *-_input.x) , 0.05)
 	
 func take_damage(dmg:int):
 	if not _can_take_damage:
@@ -83,11 +86,17 @@ func take_damage(dmg:int):
 	_can_take_damage = false
 	
 	if _health <= 0 and _is_alive:
+		$Explostion.pitch_scale = .3
+		$PropellerSFX.stop()
 		_die()
-
+		return
+	$Explostion.pitch_scale = 2.5
+	$Explostion.play()
+	
 	
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventKey:
+		_rotate_y = Input.get_axis("rotate_right","rotate_left")
 		_input = Vector3(
 			Input.get_axis("right","left"),
 			Input.get_axis("down","up"),

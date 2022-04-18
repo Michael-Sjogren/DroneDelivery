@@ -1,15 +1,19 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://package/Package.gd" type="Script" id=1]
 [ext_resource path="res://package/PackageModel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://sounds/beep.wav" type="AudioStream" id=3]
 [ext_resource path="res://sounds/Bottle Break.wav" type="AudioStream" id=4]
+[ext_resource path="res://smoke-particles/Smoke.tscn" type="PackedScene" id=5]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.296932, 0.309958, 0.302364 )
 
 [sub_resource type="SphereShape" id=2]
 radius = 0.300768
+
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 2, 2 )
 
 [node name="Package" type="RigidBody" groups=["Package"]]
 collision_layer = 5
@@ -48,8 +52,26 @@ stream = ExtResource( 3 )
 unit_db = 13.603
 unit_size = 14.4
 max_db = 3.504
-pitch_scale = 0.9
 bus = "sfx"
+
+[node name="Explostion" parent="." instance=ExtResource( 5 )]
+emitting = false
+amount = 50
+lifetime = 2.0
+one_shot = true
+speed_scale = 1.0
+explosiveness = 1.0
+mesh = SubResource( 3 )
+emission_shape = 5
+emission_ring_radius = 0.4
+emission_ring_inner_radius = 0.0
+emission_ring_height = 0.49
+emission_ring_axis = Vector3( 0, 0, 1 )
+initial_velocity = 2.0
+initial_velocity_random = 0.5
+color = Color( 1, 0.886275, 0.768627, 1 )
 
 [connection signal="body_entered" from="." to="." method="_on_Package_body_entered"]
 [connection signal="timeout" from="InvunrabillityTimer" to="." method="_on_InvunrabillityTimer_timeout"]
+
+[editable path="Explostion"]

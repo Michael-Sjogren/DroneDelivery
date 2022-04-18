@@ -48,6 +48,7 @@ tracks/0/keys = {
 }
 
 [node name="Drone" type="KinematicBody"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.54669, 6.12582, 34.6663 )
 collision_layer = 2
 collision/safe_margin = 0.05
 script = ExtResource( 1 )
@@ -55,10 +56,9 @@ __meta__ = {
 "_editor_description_": ""
 }
 angular_damping = 2.0
-linear_damping = 0.3
+linear_damping = 0.05
 angular_rotation_speed = 0.1
-acceleration_speed = 0.3
-collision_bounceback = 77.227
+acceleration_speed = 0.25
 invincibilliy_time = 1.0
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
@@ -169,20 +169,11 @@ doppler_tracking = 2
 [node name="Explostion" type="AudioStreamPlayer3D" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.022278, 0.1 )
 stream = ExtResource( 7 )
-unit_db = 0.905
-unit_size = 35.5
-pitch_scale = 0.66
 bus = "sfx"
 doppler_tracking = 2
 
 [node name="Listener" type="Listener" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.47043 )
 current = true
-
-[node name="SpotLight" type="SpotLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.474859, 0, -0.736125 )
-
-[node name="SpotLight2" type="SpotLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477477, 0, -0.736125 )
 
 [connection signal="body_entered" from="Area" to="." method="_on_Area_body_entered"]
